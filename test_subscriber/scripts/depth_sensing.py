@@ -6,31 +6,28 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 def depth_callback(msg):
+    """Take in an image, convert it to a computer vision image, 
+    then get the value of the center pixel which should be 
+    the distance from the center of the camera."""
     # type: (Image) -> None
-    # depths = msg.data
     
     try:
         cv_image = CvBridge().imgmsg_to_cv2(msg, "passthrough")
     except CvBridgeError as e:
         print(e)
 
-    # (rows,cols,channels) = cv_image.shape
-    # cv2.imshow("Image window", cv_image)
-    # cv2.waitKey(3)
+    # Get the center of the image matrix
     u = len(cv_image) / 2
     v = len(cv_image[0]) / 2
 
-    rospy.loginfo("Len: %s m", cv_image[u][v])
-    # rospy.loginfo("size: %d m", msg.step * msg.height)
+    # Output the distance in meters from the center of the camera
+    rospy.loginfo("Dist: %s m", cv_image[u][v])
     
 def depth_subscriber():
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
+    # Initialize the depth sensing node
     rospy.init_node('depth_sensing', anonymous=True)
 
+    # Initialize the subscriber to take in an image message from the specified topic
     rospy.Subscriber('/zedm/zed_node/depth/depth_registered', Image, depth_callback)
 
     # spin() simply keeps python from exiting until this node is stopped

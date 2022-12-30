@@ -1,20 +1,30 @@
-# params/zed2i.yaml
-# Parameters for Stereolabs ZED2 camera
+# params/zedm_yaml
+# Parameters for Stereolabs ZED mini camera
 ---
 
+depth_texture_conf:         90                                  # Changed: Dynamic
+point_cloud_freq:           8.0                                 # Changed: Dynamic - frequency of the pointcloud publishing (equal or less to `grab_frame_rate` value)
+
 general:
-    camera_model:               'zed2i'
+    camera_model:               'zedm'
 
 depth:
-    min_depth:                  0.3             # Min: 0.2, Max: 3.0 - Default 0.7 - Note: reducing this value wil require more computational power and GPU memory
-    max_depth:                  5.0             # Max: 40.0
+    min_depth:                  2.0                             # Added: [0.1, 3.0]. Larger values gives bettere performance
+    max_depth:                  8.0                             # Added: [1.0, 20.0]. Smaller values will give better performance most likely.
 
 pos_tracking:
-    imu_fusion:                 true            # enable/disable IMU fusion. When set to false, only the optical odometry will be used.
+    pos_tracking_enabled:       false                           # Changed: True to enable positional tracking from start 
+
+mapping:
+    mapping_enabled: true
+    resolution:                 0.05                            # maps resolution in meters [0.01f, 0.2f]
+    max_mapping_range:          -1                              # maximum depth range while mapping in meters (-1 for automatic calculation) [2.0, 20.0]
+    fused_pointcloud_freq:      1.0                             # frequency of the publishing of the fused colored point cloud
+    clicked_point_topic:        '/clicked_point'                # Topic published by Rviz when a point of the cloud is clicked. Used for plane detection
 
 sensors:
     sensors_timestamp_sync:     false           # Synchronize Sensors messages timestamp with latest received frame
-    max_pub_rate:               200.            # max frequency of publishing of sensors data. MAX: 400. - MIN: grab rate
+    max_pub_rate:               200.            # max frequency of publishing of sensors data. MAX: 800. - MIN: grab rate
     publish_imu_tf:             true            # publish `IMU -> <cam_name>_left_camera_frame` TF
 
 object_detection:
@@ -30,4 +40,4 @@ object_detection:
     mc_animal:                  true            # Enable/disable the detection of animals for 'MULTI_CLASS_BOX_X' models
     mc_electronics:             true            # Enable/disable the detection of electronic devices for 'MULTI_CLASS_BOX_X' models
     mc_fruit_vegetable:         true            # Enable/disable the detection of fruits and vegetables for 'MULTI_CLASS_BOX_X' models
-    mc_sport:                   true            # Enable/disable the detection of sport-related objects for 'MULTI_CLASS_BOX_X' models
+    mc_sport:                   true            # Enable/disable the detection of sport-related objects for 'MULTI_CLASS_BOX_X' models    

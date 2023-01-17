@@ -9,7 +9,7 @@ general:
     camera_model:               'zedm'
 
 depth:
-    min_depth:                  2.0                             # Added: [0.1, 3.0]. Larger values gives bettere performance
+    min_depth:                  1.0                             # Added: [0.1, 3.0]. Larger values gives bettere performance
     max_depth:                  8.0                             # Added: [1.0, 20.0]. Smaller values will give better performance most likely.
 
 pos_tracking:
